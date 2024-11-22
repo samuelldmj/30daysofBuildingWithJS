@@ -8,6 +8,8 @@ const suffix = this.dataset.sizing || '';
 // console.log(this.name);
 // console.log(suffix);
 
+
+//set css property
 document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
 }
 
