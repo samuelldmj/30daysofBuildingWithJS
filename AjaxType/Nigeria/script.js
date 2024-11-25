@@ -2,69 +2,72 @@ const endpoint ='https://data.humdata.org/dataset/e66dbc70-17fe-4230-b9d6-855d19
 
 const lga = [];
 
-const res = fetch(endpoint);
+// const res = fetch(endpoint);
 // res.then( lgaToJson => lgaToJson.json()).then(extractLga => lga.push(extractLga));
 
+fetch(endpoint)
+  .then(lgaToJson => lgaToJson.json())
+  .then(jsonData => {
+    // Check if features exists and is an array
+    if (jsonData.features && Array.isArray(jsonData.features)) {
+      jsonData.features.forEach(feature => {
+        // Extract NAME_1 and NAME_2 from properties
+        const name1 = feature.properties.NAME_1;
+        const name2 = feature.properties.NAME_2;
+        
+        // You can push these values into your 'lga' array
+        lga.push({ NAME_1: name1, NAME_2: name2 });
 
-res.then(lgaToJson => lgaToJson.json())
-   .then(jsonData => {
-    //   console.log(jsonData.features);
-      if (jsonData.features && Array.isArray(jsonData.features)) {
-         lga.push(...jsonData.features); 
-      } else {
-         console.error('Invalid JSON structure: Expected an array named "lgas"');
-      }
-   });
+        // log each pair
+        // console.log(`State: ${name1}, LGA: ${name2}`);
+      });
+    } else {
+      console.error('Invalid JSON structure: Expected an array in "features"');
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching the data:', error);
+  });
 
 
-   function findMatches(wordsTomatch, lga){
+  function findMatches(wordsToMatch, lga) {
     return lga.filter(place => {
-    
-        //using regwx to match the desire names of Lga or woed
-        const regex = new RegExp(wordsTomatch, 'gi');
-        //we  are filtering through array of objects. we have Lga and state properties
-        return place.NAME_1.match(regex) || place.NAME_2.match(regex);
-    })
+      const regex = new RegExp(escapeRegex(wordsToMatch), 'gi');
+      return (place.NAME_1 && place.NAME_1.match(regex)) || (place.NAME_2 && place.NAME_2.match(regex));
+    });
+  }
+  
+  function escapeRegex(str) {
+    return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'); // Escape special characters for regex
+  }
+  
+  function displayMatches() {
+    const searchedLga = searchInput.value.trim();
+  
+    if (searchedLga === '') {
+      suggestion.innerHTML = ''; // Clear suggestions if input is empty
+      return;
     }
-
-function displayMatches(){
-    console.log(this);
-
-    const searchLga = findMatches(this.value, lga);
-    console.log(searchLga);
-    let searchedLga = this.value;
-    const html = searchLga.map( find => {
-        //10            ----check 
-        if(searchedLga !== ''){
-        //9  
-        //highlighting the words that matches search words
-        const regex = new RegExp(searchedLga, 'gi');
-        const highlightMatchedLga = find.NAME_1.replace(regex, `<span class='hl'>${searchedLga}</span>`); 
-        const highlightMatchedState = find.NAME_2.replace(regex, `<span class='hl'>${searchedState} </span>`); 
-      return  `
+  
+    const searchLga = findMatches(searchedLga, lga);
+    const html = searchLga.map(find => {
+      const regex = new RegExp(escapeRegex(searchedLga), 'gi');
+      const highlightMatchedLga = find.NAME_1.replace(regex, `<span class='hl'>${searchedLga}</span>`);
+      const highlightMatchedState = find.NAME_2.replace(regex, `<span class='hl'>${searchedLga}</span>`);
+  
+      return `
         <li>
-        <span class='name'>${highlightMatchedLga}, ${highlightMatchedState}</span>
+          <span class='name'>${highlightMatchedLga}, ${highlightMatchedState}</span>
         </li>
-        `
-    }
-    //else {
-    //     return `
-    //     <li>
-    //       <span class='name'>${find.Lga}, ${find.state}</span>
-    //       <span class='population'>${find.population}</span>
-    //     </li>
-    //   `;
-    // };
-}).join('')
-suggestion.innerHTML = html;
-}
-
-
-//6
-const searchInput = document.querySelector('.search');
-const suggestion = document.querySelector('.suggestions');
-
-//7
-// searchInput.addEventListener('change', displayMatches);
-searchInput.addEventListener('keyup', displayMatches);
+      `;
+    }).join('');
+  
+    suggestion.innerHTML = html;
+  }
+  
+  const searchInput = document.querySelector('.search');
+  const suggestion = document.querySelector('.suggestions');
+  
+  searchInput.addEventListener('keyup', displayMatches);
+  
 
