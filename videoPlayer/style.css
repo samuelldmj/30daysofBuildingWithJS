@@ -101,7 +101,7 @@ body {
   width: 50%;
   background: #ffc600;
   flex: 0;
-  flex-basis: 10%;
+  flex-basis: 0%;
 }
 
 /* unholy css to style input type="range" */

@@ -2,7 +2,7 @@
 const player = document.querySelector('.player');
 const video = document.querySelector('.viewer');
 const progress = document.querySelector('.progress');
-const progressBar = document.querySelector('.progress_filled');
+const progressBar = document.querySelector('.progress__filled');
 const buttonToggle  = player.querySelector('.toggle');
 const skipButtons = player.querySelectorAll('[data-skip]');
 const ranges = player.querySelectorAll('.player__slider');
@@ -42,6 +42,11 @@ function handleProgressBar(){
     progressBar.style.flexBasis = `${percent}%`;
 }
 
+function scrub(e){
+    const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+    video.currentTime = scrubTime;
+}
+
 
 
 //EVENTS
@@ -59,7 +64,23 @@ ranges.forEach( range => range.addEventListener('click', handleRange))
 ranges.forEach( range => range.addEventListener('mouseover', handleRange))
 ranges.forEach( range => range.addEventListener('change', handleRange))
 
+
 //progress bar
 video.addEventListener('timeupdate', handleProgressBar);
 
+//progress scrub
+let mouseDown = false;
+progress.addEventListener('click', scrub)
+progress.addEventListener('mousemove', (e) => mouseDown && scrub(e))
+progress.addEventListener('mousedown', () => mouseDown = true)
+progress.addEventListener('mouseup', () => mouseDown = false)
 
+// Spacebar play/pause toggle
+document.addEventListener('keydown', function(e) {
+    // console.log(e)
+    if (e.key === " " || e.keyCode === 32) {  // Spacebar detection
+        e.preventDefault();  // Prevent the default spacebar behavior (scrolling the page)
+        togglePlay();  // Toggle play/pause when spacebar is pressed
+    }
+});
+//try to make video go fullscreen
