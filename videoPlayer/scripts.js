@@ -60,9 +60,9 @@ buttonToggle.addEventListener('click', togglePlay);
 skipButtons.forEach(btn => btn.addEventListener('click', skip));
 
 //ranges
-ranges.forEach( range => range.addEventListener('click', handleRange))
-ranges.forEach( range => range.addEventListener('mouseover', handleRange))
-ranges.forEach( range => range.addEventListener('change', handleRange))
+ranges.forEach( range => range.addEventListener('click', handleRange));
+ranges.forEach( range => range.addEventListener('mouseover', handleRange));
+ranges.forEach( range => range.addEventListener('change', handleRange));
 
 
 //progress bar
