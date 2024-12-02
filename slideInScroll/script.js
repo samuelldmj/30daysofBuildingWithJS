@@ -17,6 +17,7 @@ function debounce(func, wait = 20, immediate = true) {
 
   //selecting all images
   const sliderImages = document.querySelectorAll('.slide-in');
+  console.log(sliderImages.height);
 
   //a function that will run everytime a person scroll
    function checkSlide(e){
@@ -27,10 +28,6 @@ function debounce(func, wait = 20, immediate = true) {
         const imageBottom = sliderImage.offsetTop + sliderImage.height;
         const isHalfshown = slideInAt > sliderImage.offsetTop;
         const isNotScrolledPast = window.scrollY < imageBottom;
-        console.log('slide in at', slideInAt);
-        console.log('image bottom',imageBottom);
-        console.log('half shown',isHalfshown);
-        console.log('not scrolled past',isNotScrolledPast);
 
           if(isHalfshown && isNotScrolledPast){
             sliderImage.classList.add('active');
