@@ -1,42 +1,37 @@
 // start with strings, numbers and booleans
 
-    // Let's say we have an array
-    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+// Let's say we have an array
+const players = ['Sam', 'Sarah', 'Ryan', 'Poppy'];
+let team = players
+// console.log(players, team);
 
-    // and we want to make a copy of it.
+//reference
+team[3] = 'Dan';
+// console.log(players, team);
 
-    // You might think we can just do something like this:
+//copy
+const sliceTeam = team.slice(1,3);
+// console.log(sliceTeam, team);
+const conCatTeam = [].concat(team);
+// console.log(conCatTeam, team);
 
-    // however what happens when we update that array?
+const sprTeam = [...team];
+// console.log(sprTeam, team);
 
-    // now here is the problem!
+// with Objects
+const person = {
+    name: 'Sam Bol',
+    age: 80
+};
 
-    // oh no - we have edited the original array too!
+//reference
+const cap = person;
+// cap['number'] = 99
+// console.log(cap, person);
 
-    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+//copy
+const copyObj = Object.assign({}, cap, {number:99} );
+console.log(copyObj, cap);
 
-    // So, how do we fix this? We take a copy instead!
-
-    // one way
-
-    // or create a new array and concat the old one in
-
-    // or use the new ES6 Spread
-
-    // now when we update it, the original one isn't changed
-
-    // The same thing goes for objects, let's say we have a person object
-
-    // with Objects
-    const person = {
-      name: 'Wes Bos',
-      age: 80
-    };
-
-    // and think we make a copy:
-
-    // how do we take a copy instead?
-
-    // We will hopefully soon see the object ...spread
-
-    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+// Things to note - this is only 1 level deep - both for Arrays and Objects.
+//lodash has a cloneDeep method, but you should think twice before using it.
