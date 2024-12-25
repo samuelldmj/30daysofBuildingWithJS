@@ -5,10 +5,11 @@ const options = document.querySelectorAll('[type="range"], [name="text"]');
 const speakButton = document.querySelector('#speak');
 const stopButton = document.querySelector('#stop');
 
-console.log(msg);
+console.log('msg = ',msg);
 msg.text = document.querySelector('[name="text"]').value;
 
 function populateVoices(){
+    //returns an array of SpeechSynthesisVoice objects
     voices = this.getVoices();
     // console.log(voices);
     voiceOPtions = voices.map( voice => `<option value="${voice.name}">${voice.name} ${voice.lang}</option>`).join('');
@@ -17,8 +18,8 @@ function populateVoices(){
 
 
 function switchVoice(){
-    msg.voice = voices.find( voice => voice.name === this.value)
-    toggle()
+    msg.voice = voices.find( voice => voice.name === this.value);
+    toggle();
 }
 
 function toggle(startover = true){
